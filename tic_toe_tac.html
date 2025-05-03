@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tic Tac Toe</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #fff;
+    }
+    #game {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      gap: 5px;
+      margin: 20px auto;
+      width: max-content;
+      background-color: black;
+    }
+    .cell {
+      width: 100px;
+      height: 100px;
+      font-size: 2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #fff;     
+      cursor: pointer;
+    }
+    .cell:hover {
+      background-color: #fff;
+    }
+    #status {
+      font-size: 1.2em;
+      margin-top: 10px;
+    }
+    button{
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tic Tac Toe</h1>
+  <div id="game">
+    <div class="cell" data-index="0"></div>
+    <div class="cell" data-index="1"></div>
+    <div class="cell" data-index="2"></div>
+    <div class="cell" data-index="3"></div>
+    <div class="cell" data-index="4"></div>
+    <div class="cell" data-index="5"></div>
+    <div class="cell" data-index="6"></div>
+    <div class="cell" data-index="7"></div>
+    <div class="cell" data-index="8"></div>
+  </div>
+  <p id="status"><span style="color: red;">X</span>'s turn</p>
+  <button onclick="resetGame()">Reset</button>
+
+  <script>
+    const cells = document.querySelectorAll('.cell');
+    const statusText = document.getElementById('status');
+    let currentPlayer = 'X';
+    let board = ['', '', '', '', '', '', '', '', ''];
+    let isGameActive = true;
+
+    const winningCombos = [
+      [0,1,2], [3,4,5], [6,7,8],
+      [0,3,6], [1,4,7], [2,5,8],
+      [0,4,8], [2,4,6]
+    ];
+
+    function handleCellClick(e) {
+      const index = e.target.getAttribute('data-index');
+      if (board[index] !== '' || !isGameActive) return;
+
+      board[index] = currentPlayer;
+      e.target.innerHTML = currentPlayer === 'X' 
+        ? '<span style="color: red;">X</span>' 
+        : '<span style="color: blue;">O</span>';
+
+      if (checkWin()) {
+        statusText.innerHTML = `<span style="color: red;">${currentPlayer}</span> wins!`;
+        isGameActive = false;
+      } else if (board.every(cell => cell !== '')) {
+        statusText.innerHTML = `<span style="color: black;">It's a draw!</span>`;
+        isGameActive = false;
+      } else {
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        if(currentPlayer === 'X'){
+          statusText.innerHTML = `<span style="color: red;">${currentPlayer}</span>'s turn`;
+        } else{
+          statusText.innerHTML = `<span style="color: blue;">${currentPlayer}</span>'s turn`;
+        }     
+      }
+    }
+
+    function checkWin() {
+      return winningCombos.some(combo => {
+        return combo.every(i => board[i] === currentPlayer);
+      });
+    }
+
+    function resetGame() {
+      board = ['', '', '', '', '', '', '', '', ''];
+      cells.forEach(cell => cell.textContent = '');
+      currentPlayer = 'X';
+      isGameActive = true;
+      statusText.innerHTML = `<span style="color: red;">X</span>'s turn`;
+    }
+
+    cells.forEach(cell => cell.addEventListener('click', handleCellClick));
+  </script>
+</body>
+</html>
