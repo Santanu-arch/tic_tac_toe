@@ -5,38 +5,76 @@
   <title>Tic Tac Toe</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background-color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
     }
+
+    h1 {
+      color: #333;
+      margin-bottom: 40px;
+      font-size: 4em;
+    }
+
     #game {
       display: grid;
-      grid-template-columns: repeat(3, 100px);
-      gap: 5px;
-      margin: 20px auto;
-      width: max-content;
-      background-color: black;
+      grid-template-columns: repeat(3, 120px);
+      grid-template-rows: repeat(3, 120px);
+      gap: 10px;
+      padding: 10px;
+      background-color: #000;
+      border-radius: 10px;
     }
+
     .cell {
-      width: 100px;
-      height: 100px;
-      font-size: 2em;
+      width: 120px;
+      height: 120px;
+      font-size: 3em;
+      font-weight: bold;
+      background-color: #fff;
+      color: #333;
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: #fff;     
       cursor: pointer;
+      transition: background-color 0.3s ease;
+      border-radius: 8px;
     }
+
     .cell:hover {
-      background-color: #fff;
+      background-color: #e6e6e6;
     }
+
     #status {
-      font-size: 1.2em;
-      margin-top: 10px;
+      margin-top: 50px;
+      font-size: 3em;
+      color: #555;
     }
-    button{
-      font-size: 1em;
+
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 2.5em;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
     }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    span.red { color: red; }
+    span.blue { color: blue; }
+    span.black { color: black; }
   </style>
 </head>
 <body>
@@ -52,7 +90,7 @@
     <div class="cell" data-index="7"></div>
     <div class="cell" data-index="8"></div>
   </div>
-  <p id="status"><span style="color: red;">X</span>'s turn</p>
+  <p id="status"><span class="red">X</span>'s turn</p>
   <button onclick="resetGame()">Reset</button>
 
   <script>
@@ -74,22 +112,18 @@
 
       board[index] = currentPlayer;
       e.target.innerHTML = currentPlayer === 'X' 
-        ? '<span style="color: red;">X</span>' 
-        : '<span style="color: blue;">O</span>';
+        ? '<span class="red">X</span>' 
+        : '<span class="blue">O</span>';
 
       if (checkWin()) {
-        statusText.innerHTML = `<span style="color: red;">${currentPlayer}</span> wins!`;
+        statusText.innerHTML = `<span class="${currentPlayer === 'X' ? 'red' : 'blue'}">${currentPlayer}</span> wins!`;
         isGameActive = false;
       } else if (board.every(cell => cell !== '')) {
-        statusText.innerHTML = `<span style="color: black;">It's a draw!</span>`;
+        statusText.innerHTML = `<span class="black">It's a draw!</span>`;
         isGameActive = false;
       } else {
         currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-        if(currentPlayer === 'X'){
-          statusText.innerHTML = `<span style="color: red;">${currentPlayer}</span>'s turn`;
-        } else{
-          statusText.innerHTML = `<span style="color: blue;">${currentPlayer}</span>'s turn`;
-        }     
+        statusText.innerHTML = `<span class="${currentPlayer === 'X' ? 'red' : 'blue'}">${currentPlayer}</span>'s turn`;
       }
     }
 
@@ -104,7 +138,7 @@
       cells.forEach(cell => cell.textContent = '');
       currentPlayer = 'X';
       isGameActive = true;
-      statusText.innerHTML = `<span style="color: red;">X</span>'s turn`;
+      statusText.innerHTML = `<span class="red">X</span>'s turn`;
     }
 
     cells.forEach(cell => cell.addEventListener('click', handleCellClick));
